@@ -1,18 +1,20 @@
 #include<bits/stdc++.h>
 #include "board.cpp"
 using namespace std;
+  
 
 class movegen: public board{
-    int kingMov[]= {-1,1,-10,10,9,11,-9,-11};               //stores the value for which the king can move on the board.
-    int queenMov[] = {1,-1,10,-10,-9, -11, 9 , 11};         //stores the value for which the Queen can move on the board.
-    int bishopMov[] = {-9, -11, 9 , 11};                    //stores the value for which the Bishop can move on the board.
-    int knightMov[] = {8,-8,12,-12,19,-19,21,-21};          //stores the value for which the Knight can move on the board.
-    int rookMov[] = { 10,-10, 1,-1};                        //stores the value for which the Rook can move on the board.
-    int PawnMov[ ] = {10,9,11,-10,-9,-11};
-    
-    vector<int> movList[256];                                       // stores the indexes from and to for all available moves. 
+    protected:
+    vector<int> kingMov= {-1,1,-10,10,9,11,-9,-11};         //stores the value for which the king can move on the board.
+    vector<int> queenMov= {1,-1,10,-10,-9, -11, 9 , 11};    //stores the value for which the Queen can move on the board.
+    vector<int> bishopMov= {-9, -11, 9 , 11};               //stores the value for which the Bishop can move on the board.
+    vector<int> rookMov = { 10,-10, 1,-1};                  //stores the value for which the Rook can move on the board.
+    vector<int> knightMov = {8,-8,12,-12,19,-19,21,-21};    //stores the value for which the Knight can move on the board.
 
-    bool SqAttacked(int sq);
+    vector<int> movelist;                                       // stores the indexes from and to for all available moves. 
+    public:
+    
+    bool SqAttacked(int sq, int side);
     void PawnMov(int side);
     void KingMov(int side);
     void KnightMov(int side);
@@ -20,6 +22,7 @@ class movegen: public board{
     void BQMov(int side);
     void CastleMov(int side);
 };
+
 
 bool movegen::SqAttacked(int sq, int side){
     //King
@@ -64,7 +67,7 @@ bool movegen::SqAttacked(int sq, int side){
     }
     // Rook
     for(int i=0;i<4;i++){
-        int tsq=sq+RookMov[i];
+        int tsq=sq+rookMov[i];
         int f=tsq%10;
         int r=tsq/10;
         while(f>=0 && f<=7 && r>=0 && r<=7){
@@ -80,14 +83,14 @@ bool movegen::SqAttacked(int sq, int side){
             if(Brd[r][f]!=EMPTY){
                 break;
             }
-            tsq=tsq+RookMov[i];
+            tsq=tsq+rookMov[i];
             f=tsq%10;
             r=tsq/10;
         }
     }
     // Bishop
     for(int i=0;i<4;i++){
-        int tsq=sq+BishopMov[i];
+        int tsq=sq+bishopMov[i];
         int f=tsq%10;
         int r=tsq/10;
         while(f>=0 && f<=7 && r>=0 && r<=7){
@@ -103,7 +106,7 @@ bool movegen::SqAttacked(int sq, int side){
             if(Brd[r][f]!=EMPTY){
                 break;
             }
-            tsq=tsq+BishopMov[i];
+            tsq=tsq+bishopMov[i];
             f=tsq%10;
             r=tsq/10;
         }
@@ -127,9 +130,9 @@ bool movegen::SqAttacked(int sq, int side){
     }
     //Pawn
     if(side==0){
-        tsq=sq+9;
-        f=tsq%10;
-        r=tsq/10;
+        int tsq=sq+9;
+        int f=tsq%10;
+        int r=tsq/10;
         if(f>=0 && f<=7 && r>=0 && r<=7){
             if(Brd[r][f]==bP){
                 return true;
@@ -145,9 +148,9 @@ bool movegen::SqAttacked(int sq, int side){
         }
     }
     else{
-        tsq=sq-9;
-        f=tsq%10;
-        r=tsq/10;
+        int tsq=sq-9;
+        int f=tsq%10;
+        int r=tsq/10;
         if(f>=0 && f<=7 && r>=0 && r<=7){
             if(Brd[r][f]==wP){
                 return true;
@@ -166,14 +169,15 @@ bool movegen::SqAttacked(int sq, int side){
 }
 
 void movegen::PawnMov(int side){
-    pawnside = side*6 + 1;
+    int move = 0;
+    int pawnside = side*6 + 1;
     int sidemove[] = {1,-1};
     for(int i = 0; i<PieceNum[pawnside]; i++){
         int sq = PList[pawnside][i];
         int rank = sq/10;
         int column = sq%10;
         if(Brd[rank+ sidemove[side]][column] == EMPTY){
-            int move = 0;
+            move = 0;
             move = move^column;
             move = move^(rank<<3);
             move = move^(column)<<6;
@@ -187,7 +191,7 @@ void movegen::PawnMov(int side){
             }
             movelist.push_back(move);
             if(rank == side*5 + 1 && Brd[rank+sidemove[side]*2][column] == EMPTY){
-                int move = 0;
+                move = 0;
                 move = move^column;
                 move = move^(rank<<3);
                 move = move^(column)<<6;

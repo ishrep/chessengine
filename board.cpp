@@ -7,6 +7,7 @@ enum {A=0,B=1,C=2,D=3,E=4,F=5,G=6,H=7};
 string files= "abcdefgh";
 int PceVal[13] = { 0, 100, 325, 325, 550, 1000, 50000, 100, 325, 325, 550, 1000, 50000};
 class board{
+    protected:
     //data members
     int Brd[8][8]; //stores piece type in each block
     int PList[13][10]; //stores index of board for each piece type
