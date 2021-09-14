@@ -5,6 +5,7 @@
 string fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w Qkq e4 32 132";
 using namespace std;
 int main(){
-    board game; 
+    movegen game; 
     game.ParseFEN(fen);
+    cout<<"\n"<<game.SqAttacked(21,0);
 }

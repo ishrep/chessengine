@@ -1,5 +1,4 @@
 #include<bits/stdc++.h>
-#include "board.cpp"
 using namespace std;
   
 
