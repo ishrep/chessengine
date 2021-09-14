@@ -1,4 +1,4 @@
-    #include<bits/stdc++.h>
+#include<bits/stdc++.h>
 #define OFFBOARD 100
 using namespace std;
 enum {WHITE=0,BLACK=1};
@@ -129,7 +129,7 @@ void board::AddPiece(int pce, int rank, int file){
     int sq = rank*10 + file;
     Brd[rank][file] = pce;
     PList[pce][PieceNum[pce]] = sq;
-    PieceNum[pce]++;
+    ++PieceNum[pce]=OFFBOARD;
     if(pce>=0 && pce<=6){
         Material[0] += PceVal[pce];
     }
