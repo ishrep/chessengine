@@ -201,19 +201,24 @@ void movegen::PawnMov(int side){
         int rd = rank + sidemove[side];
         int cdl = column + sidemove[side];
         int cdr = column - sidemove[side];
-        if(Brd[rd][cdl] >6 && Brd[rd][cdl] <13){
+        if(rd>-1 &&rd <8 && cdl>-1 && cdl<8 && Brd[rd][cdl] >6 && Brd[rd][cdl] <13){
             move = move^column;
             move = move^(rank<<3);
             move = move^(cdl)<<6;
             move = move^(rd<<9);
             movelist.push_back(move);
         }
-        if(Brd[rd][cdr] >6 && Brd[rd][cdr] <13){
+        if(rd>-1 &&rd <8 && cdr>-1 && cdr<8 && Brd[rd][cdr] >6 && Brd[rd][cdr] <13){
             move = move^column;
             move = move^(rank<<3);
             move = move^(cdr)<<6;
             move = move^(rd<<9);
             movelist.push_back(move);
+        }
+
+        
+    for(int i = 0; i<movelist.size();i++){
+        cout<<movelist[i]<<"\n";
         }
     }
 }

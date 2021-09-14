@@ -105,11 +105,13 @@ void board::ParseFEN(string fen){
             }
         }
     }
+    else{
+        i++;
+    }
     
     if(fen[++i]!= '-'){
         EnPassant = (fen[i] - 'a');
-        EnPassant += ((fen[++i] - '1')*10);
-        
+        EnPassant += ((fen[++i] - '1')*10);  
     }
     
     i+=2;
@@ -119,8 +121,8 @@ void board::ParseFEN(string fen){
     i+=2;
     
     TotalMoves = fen[i]-'0';
-    if(fen[i+1]!=' ') TotalMoves = TotalMoves*10+ fen[++i] - '0';
-    if(fen[i+1]!=' ') TotalMoves = TotalMoves*10+ fen[++i] - '0';
+    if(fen[i+1]!='\0') TotalMoves = TotalMoves*10+ fen[++i] - '0';
+    if(fen[i+1]!='\0') TotalMoves = TotalMoves*10+ fen[++i] - '0';
     
 
     PrintBoard();
@@ -130,7 +132,7 @@ void board::AddPiece(int pce, int rank, int file){
     int sq = rank*10 + file;
     Brd[rank][file] = pce;
     PList[pce][PieceNum[pce]] = sq;
-    ++PieceNum[pce]=OFFBOARD;
+    PList[pce][++PieceNum[pce]] = sq;
     if(pce>=0 && pce<=6){
         Material[0] += PceVal[pce];
     }
