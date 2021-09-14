@@ -1,5 +1,5 @@
 #include<bits/stdc++.h>
-#include "board.cpp"
+//#include "board.cpp"
 using namespace std;
   
 
@@ -199,18 +199,21 @@ void movegen::PawnMov(int side){
                 movelist.push_back(move);
             }
         }
-        if(Brd[rank + sidemove[side]][column + sidemove[side]] >6 && Brd[rank+ sidemove[side]][column + sidemove[side]] <13){
+        int rd = rank + sidemove[side];
+        int cdl = column + sidemove[side];
+        int cdr = column - sidemove[side];
+        if(Brd[rd][cdl] >6 && Brd[rd][cdl] <13){
             move = move^column;
             move = move^(rank<<3);
-            move = move^(column + sidemove[side])<<6;
-            move = move^(rank + sidemove[side]*2<<9);
+            move = move^(cdl)<<6;
+            move = move^(rd<<9);
             movelist.push_back(move);
         }
-        if(Brd[rank + sidemove[side]][column - sidemove[side]] >6 && Brd[rank + sidemove[side]][column - sidemove[side]] <13){
+        if(Brd[rd][cdr] >6 && Brd[rd][cdr] <13){
             move = move^column;
             move = move^(rank<<3);
-            move = move^(column + sidemove[side])<<6;
-            move = move^(rank + sidemove[side]*2<<9);
+            move = move^(cdr)<<6;
+            move = move^(rd<<9);
             movelist.push_back(move);
         }
     }
