@@ -132,7 +132,7 @@ void board::AddPiece(int pce, int rank, int file){
     int sq = rank*10 + file;
     Brd[rank][file] = pce;
     PList[pce][PieceNum[pce]] = sq;
-    PList[pce][++PieceNum[pce]] = sq;
+    PList[pce][++PieceNum[pce]] = OFFBOARD;
     if(pce>=0 && pce<=6){
         Material[0] += PceVal[pce];
     }
