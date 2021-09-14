@@ -82,7 +82,7 @@ void board::ParseFEN(string fen){
                         continue;
         }
         if(fen[i] >= '1' && fen[i] <= '8'){
-            file += fen[i] - '1';
+            file += fen[i] - '0';
         }
         else file++;
     }
