@@ -20,6 +20,7 @@ class movegen: public board{
     void RQMov(int side);
     void BQMov(int side);
     void CastleMov(int side);
+    void PrintMoveList();
 };
 
 
@@ -175,6 +176,7 @@ void movegen::PawnMov(int side){
         int sq = PList[pawnside][i];
         int rank = sq/10;
         int column = sq%10;
+        cout<<"\n"<<rank<<" - "<<column;
         if(Brd[rank+ sidemove[side]][column] == EMPTY){
             move = 0;
             move = move^column;
@@ -201,6 +203,14 @@ void movegen::PawnMov(int side){
         int rd = rank + sidemove[side];
         int cdl = column + sidemove[side];
         int cdr = column - sidemove[side];
+        if(EnPassant != OFFBOARD && (EnPassant == sidemove[side]*9 + sq || EnPassant == sidemove[side]*11 + sq)){
+            move = move^column;
+            move = move^(rank<<3);
+            move = move^((EnPassant%10)<<6);
+            move = move^((EnPassant/10)<<9);
+            movelist.push_back(move);
+        }
+
         if(rd>-1 &&rd <8 && cdl>-1 && cdl<8 && Brd[rd][cdl] >6 && Brd[rd][cdl] <13){
             move = move^column;
             move = move^(rank<<3);
@@ -215,10 +225,18 @@ void movegen::PawnMov(int side){
             move = move^(rd<<9);
             movelist.push_back(move);
         }
+    }
+    PrintMoveList();
+}
 
-        
-    for(int i = 0; i<movelist.size();i++){
-        cout<<movelist[i]<<"\n";
-        }
+void movegen::PrintMoveList(){
+    for(int i = 0 ; i<movelist.size(); i++ ){
+        int temp=movelist[i];
+        cout<<"\nfrom: "<<(temp & 7)<<((temp>>3)&7)
+        <<"\nTo: "<<((temp>>6)&7)<<((temp>>9)&7)
+        <<"\nProm: "<<((temp>>12)&15)
+        <<"\nEP: "<<((temp>>16)&1)
+        <<"\ncast: "<<((temp>>17)&1)
+        <<endl;
     }
 }
