@@ -13,18 +13,29 @@ class movegen: public board{
     vector<int> movelist;                                       // stores the indexes from and to for all available moves. 
     public:
     
-    bool SqAttacked(int sq, int side);
-    void PawnMov(int side);
-    void KingMov(int side);
-    void KnightMov(int side);
-    void RQMov(int side);
-    void BQMov(int side);
-    void CastleMov(int side);
+    bool SqAttacked(int sq);
+    void PawnMov();
+    void KingMov();
+    void KnightMov();
+    void RQMov();
+    void BQMov();
+    void CastleMov();
     void PrintMoveList();
+    void createmove(int fc,int fr, int tc, int tr, int pp, int ep,int castle);
 };
 
-
-bool movegen::SqAttacked(int sq, int side){
+void movegen::createmove(int fc,int fr, int tc, int tr, int pp, int ep,int cs){
+            int move=0;
+            move = move^fc;
+            move = move^(fr<<3);
+            move = move^(tc)<<6;
+            move = move^(tr<<9);
+            move = move^(pp<<12);
+            move = move^(ep<<16);
+            move = move^(cs<<17);
+            movelist.push_back(move);
+}
+bool movegen::SqAttacked(int sq){
     //King
     for(int i=0;i<8;i++){
         int tsq=sq+kingMov[i];
@@ -168,72 +179,105 @@ bool movegen::SqAttacked(int sq, int side){
     return false;
 }
 
-void movegen::PawnMov(int side){
+void movegen::PawnMov(){
     int move = 0;
     int pawnside = side*6 + 1;
+    int oppside[] = {1,0};
     int sidemove[] = {1,-1};
     for(int i = 0; i<PieceNum[pawnside]; i++){
         int sq = PList[pawnside][i];
         int rank = sq/10;
         int column = sq%10;
-        cout<<"\n"<<rank<<" - "<<column;
         if(Brd[rank+ sidemove[side]][column] == EMPTY){
-            move = 0;
-            move = move^column;
-            move = move^(rank<<3);
-            move = move^(column)<<6;
-            move = move^(rank+sidemove[side]<<9);
-            if(rank == 6){
+            //promotion
+            if(rank == ((side+1)%2)*5 + 1){
                  for(int i = 1;i<=4;i++){
-                     move = move^((pawnside+i)<<12);
-                     movelist.push_back(move);
-                     move = move^((pawnside+i)<<12);
+                     createmove(column,rank,column,rank+sidemove[side],pawnside+i,0,0);
                  }
             }
-            movelist.push_back(move);
+            //normal move
+            else createmove(column,rank,column,rank+sidemove[side],0,0,0);
+            //pawn Start
             if(rank == side*5 + 1 && Brd[rank+sidemove[side]*2][column] == EMPTY){
-                move = 0;
-                move = move^column;
-                move = move^(rank<<3);
-                move = move^(column)<<6;
-                move = move^(rank + sidemove[side]*2<<9);
-                movelist.push_back(move);
+                createmove(column,rank,column,rank+sidemove[side]*2,0,0,0);
             }
         }
         int rd = rank + sidemove[side];
         int cdl = column + sidemove[side];
         int cdr = column - sidemove[side];
+        //enPassant
         if(EnPassant != OFFBOARD && (EnPassant == sidemove[side]*9 + sq || EnPassant == sidemove[side]*11 + sq)){
-            move = move^column;
-            move = move^(rank<<3);
-            move = move^((EnPassant%10)<<6);
-            move = move^((EnPassant/10)<<9);
-            movelist.push_back(move);
+            createmove(column,rank,(EnPassant%10),(EnPassant/10),0,1,0);
         }
-
-        if(rd>-1 &&rd <8 && cdl>-1 && cdl<8 && Brd[rd][cdl] >6 && Brd[rd][cdl] <13){
-            move = move^column;
-            move = move^(rank<<3);
-            move = move^(cdl)<<6;
-            move = move^(rd<<9);
-            movelist.push_back(move);
+        // capture moves
+        //left side
+        if(cdl>-1 && cdl<8 && Brd[rd][cdl] > oppside[side]*6 && Brd[rd][cdl] < oppside[side]*6+7){
+            if(rank == ((side+1)%2)*5 + 1){
+                 for(int i = 1;i<=4;i++){
+                     createmove(column,rank,cdl,rd,pawnside+i,0,0);
+                 }
+            }
+            else createmove(column,rank,cdl,rd,0,0,0);
         }
-        if(rd>-1 &&rd <8 && cdr>-1 && cdr<8 && Brd[rd][cdr] >6 && Brd[rd][cdr] <13){
-            move = move^column;
-            move = move^(rank<<3);
-            move = move^(cdr)<<6;
-            move = move^(rd<<9);
-            movelist.push_back(move);
+        //right side
+        if(cdr>-1 && cdr<8 && Brd[rd][cdr] > oppside[side]*6 && Brd[rd][cdr] < oppside[side]*6+7){
+            if(rank == ((side+1)%2)*5 + 1){
+                 for(int i = 1;i<=4;i++){
+                     createmove(column,rank,cdr,rd,pawnside+i,0,0);
+                 }
+            }
+            else createmove(column,rank,cdr,rd,0,0,0);
         }
     }
     PrintMoveList();
 }
 
+void movegen::KingMov(){
+    int sq = PList[side*6 + 6][0];
+    int rank = sq/10;
+    int file = sq %10;
+    int oppside[] = {1,0};
+    for(int i = 0;i<8;i++){
+        int tsq = sq + kingMov[i];
+        int trank = tsq/10;
+        int tfile = tsq%10;  
+        if(trank>-1 && trank<8 && tfile>-1 && tfile<8 
+                && (Brd[trank][tfile]== EMPTY 
+                || (Brd[trank][tfile] > oppside[side]*6 
+                && Brd[trank][tfile] < oppside[side]*6 +7)) 
+                && !SqAttacked(tsq)){
+            createmove(file,rank,tfile,trank,0,0,0);
+        }
+    }
+}
+
+void movegen::CastleMov(){
+    int sq = PList[side*6 + 6][0];
+    int rank = sq/10;
+    int file = sq %10;
+    int oppside[] = {1,0};
+    if(side==WHITE && !SqAttacked(PList[wK][0])){
+        if(CastlePerm & 1 == 1 && Brd[0][5] == EMPTY && Brd[0][6] == EMPTY && !SqAttacked(5) && !SqAttacked(6)){
+            createmove(file,rank,6,0,0,0,1);
+        }
+        if(CastlePerm & 2==2 && Brd[0][1] == EMPTY && Brd[0][2] == EMPTY && Brd[0][3] == EMPTY && !SqAttacked(2) && !SqAttacked(3)){
+            createmove(file,rank,2,0,0,0,1);
+        }
+    }else if(side == BLACK  && !SqAttacked(PList[bK][0])){
+        if(CastlePerm & 4 == 4  && Brd[7][5] == EMPTY && Brd[7][6] == EMPTY && !SqAttacked(75) && !SqAttacked(76)){
+            createmove(file,rank,6,7,0,0,1);
+        }
+        if(CastlePerm & 8 == 8 && Brd[7][2] == EMPTY && Brd[7][3] == EMPTY && Brd[7][1] == EMPTY && !SqAttacked(72) && !SqAttacked(73)){
+            createmove(file,rank,2,7,0,0,1);
+        }
+    }
+}
+
 void movegen::PrintMoveList(){
     for(int i = 0 ; i<movelist.size(); i++ ){
         int temp=movelist[i];
-        cout<<"\nfrom: "<<(temp & 7)<<((temp>>3)&7)
-        <<"\nTo: "<<((temp>>6)&7)<<((temp>>9)&7)
+        cout<<"\nfrom: "<<files[(temp & 7)]<<((temp>>3)&7)+1
+        <<"\nTo: "<<files[((temp>>6)&7)]<<((temp>>9)&7)+1
         <<"\nProm: "<<((temp>>12)&15)
         <<"\nEP: "<<((temp>>16)&1)
         <<"\ncast: "<<((temp>>17)&1)
