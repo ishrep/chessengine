@@ -17,8 +17,9 @@ class movegen: public board{
     void PawnMov();
     void KingMov();
     void KnightMov();
-    void RQMov();
-    void BQMov();
+    void RookMov();
+    void BishopMov();
+    void QueenMov();
     void CastleMov();
     void PrintMoveList();
     void createmove(int fc,int fr, int tc, int tr, int pp, int ep,int castle);
@@ -282,5 +283,104 @@ void movegen::PrintMoveList(){
         <<"\nEP: "<<((temp>>16)&1)
         <<"\ncast: "<<((temp>>17)&1)
         <<endl;
+    }
+}
+
+void movegen::KnightMov(){
+    int oppside[] = {1,0};
+    for(int j=0;j<PieceNum[side*6+2];j++){
+        for(int i=0; i<8;i++){
+            int sq=PList[side*6+2][j];
+            int tsq=sq+knightMov[i];
+            int f=tsq%10;
+            int r=tsq/10;
+            if(f>=0 && f<=7 && r>=0 && r<=7){
+                if(Brd[r][f]==EMPTY 
+                || (Brd[r][f] > oppside[side]*6 
+                && Brd[r][f] < oppside[side]*6 +7)){
+                    createmove(sq%10,sq/10,f,r,0,0,0);
+                } 
+            }
+        }
+    }
+}
+
+void movegen::RookMov(){
+    int tsq;
+    int r;
+    int f;
+    int oppside[] = {1,0};
+    for(int j=0;j<PieceNum[side*6+4];j++){
+        for(int i=0; i<4;i++){
+            int sq=PList[side*6+4][j]; 
+            tsq=sq+rookMov[i];
+            f=tsq%10;
+            r=tsq/10;
+            while(f>=0 && f<=7 && r>=0 && r<=7){
+                if(Brd[r][f] == EMPTY)
+                    createmove(sq%10,sq/10,f,r,0,0,0);
+                else if(Brd[r][f] > oppside[side]*6 && Brd[r][f] < oppside[side]*6 +7){
+                    createmove(sq%10,sq/10,f,r,0,0,0);
+                    break;
+                    }
+                else break;
+                
+                tsq=tsq+rookMov[i];
+                f=tsq%10;
+                r=tsq/10;
+            }
+        }
+    }
+}
+
+void movegen::BishopMov(){
+    int oppside[] = {1,0};
+    for(int j=0;j<PieceNum[side*6+3];j++){
+        for(int i=0;i<4;i++){
+            int sq=PList[side*6+3][j];
+            int tsq=sq+bishopMov[i];
+            int f=tsq%10;
+            int r=tsq/10;
+            while(f>=0 && f<=7 && r>=0 && r<=7){
+                if(Brd[r][f]==EMPTY){
+                    createmove(sq%10,sq/10,f,r,0,0,0);
+                }
+                else if(Brd[r][f] > oppside[side]*6 
+                && Brd[r][f] < oppside[side]*6 +7){
+                    createmove(sq%10,sq/10,f,r,0,0,0);
+                    break;
+                }
+                else break;
+                tsq=tsq+bishopMov[i];
+                f=tsq%10;
+                r=tsq/10;
+            }
+        }
+    }
+}
+
+void movegen::QueenMov(){
+    int oppside[] = {1,0};
+    for(int j=0;j<PieceNum[side*6+5];j++){
+        for(int i=0;i<8;i++){
+            int sq=PList[side*6+5][j];
+            int tsq=sq+queenMov[i];
+            int f=tsq%10;
+            int r=tsq/10;
+            while(f>=0 && f<=7 && r>=0 && r<=7){
+                if(Brd[r][f]==EMPTY){
+                    createmove(sq%10,sq/10,f,r,0,0,0);
+                }
+                else if(Brd[r][f] > oppside[side]*6 
+                && Brd[r][f] < oppside[side]*6 +7){
+                    createmove(sq%10,sq/10,f,r,0,0,0);
+                    break;
+                }
+                else break;
+                tsq=tsq+queenMov[i];
+                f=tsq%10;
+                r=tsq/10;
+            }
+        }
     }
 }
