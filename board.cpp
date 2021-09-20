@@ -23,7 +23,7 @@ class board{
     void SetBoard();
     void ParseFEN(string fen);
     void AddPiece(int pce, int rank, int file);
-    void ClearPiece(int sq);
+    void ClearPiece(int rank,int file);
     void UpdateMaterial();
     void PrintBoard();
 
@@ -138,6 +138,23 @@ void board::AddPiece(int pce, int rank, int file){
     }
     else  Material[1] += PceVal[pce];
 }
+void board::ClearPiece(int rank, int file){
+    int pce = Brd[rank][file];
+    int sq = rank *10 + file;
+    for(int i = 0; i<PieceNum[i] ; i++){
+        if(PList[pce][i] == sq){
+            Brd[rank][file] = EMPTY;
+            PList[pce][i] = PList[pce][PieceNum[pce]];
+            PieceNum[pce] = OFFBOARD;
+            PieceNum[pce]--;
+            if(pce>=0 && pce<=6){
+                Material[0] -= PceVal[pce];
+            }
+            else  Material[1] -= PceVal[pce];
+            return;
+        }
+    }
+}
 
 void board::PrintBoard(){
     int temp=0;
@@ -180,3 +197,4 @@ void board::PrintBoard(){
     cout<<"\nTotal Moves:"<<TotalMoves;
     cout<<"\nFifty Moves:"<<FiftyMoves;
 }
+
