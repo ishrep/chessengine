@@ -23,7 +23,17 @@ class movegen: public board{
     void CastleMov();
     void PrintMoveList();
     void createmove(int fc,int fr, int tc, int tr, int pp, int ep,int castle);
+    void GenerateAllMoves();
 };
+void movegen::GenerateAllMoves(){
+    void PawnMov();
+    void KingMov();
+    void KnightMov();
+    void RookMov();
+    void BishopMov();
+    void QueenMov();
+    void CastleMov();
+}
 
 void movegen::createmove(int fc,int fr, int tc, int tr, int pp, int ep,int cs){
             int move=0;
