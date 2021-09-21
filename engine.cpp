@@ -11,7 +11,7 @@ int main(){
     movegen game; 
     game.ParseFEN(fen1);
 
-    game.QueenMov();
+    game.KingMov();
 
     game.PrintMoveList();
 
