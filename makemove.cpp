@@ -101,7 +101,7 @@ bool makemove::execmove(int move){
     }
     CastlePerm= CastlePerm & (fr*10+ff);
     CastlePerm= CastlePerm & (tr*10+tf);
-    EnPassant = 0;
+    EnPassant = OFFBOARD;
     if((pce == wP && tr== fr + 2 && fr == 1) || (pce == bP && tr == fr - 2 && fr == 6)){
         EnPassant = (tr - sidedir[side])*10 + tf;
         FiftyMoves = 0;
