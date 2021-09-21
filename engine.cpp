@@ -4,15 +4,12 @@
 #include "makemove.cpp"
 
 
-string fen = "8/8/8/1P6/8/8/8/8 w - - 32 132";
+string fen4 = "rnbqkbnr/pppppppp/8/8/4r3/8/PPPPPPPP/RNBQKBNR b Kkq d2 23 113";
 string fen1 = "1K5r/8/8/4q3/8/8/1Q6/R2k4 w - - 0 1";
 using namespace std;
 int main(){
-    movegen game; 
-    game.ParseFEN(fen1);
-
-    game.KingMov();
-
-    game.PrintMoveList();
+    makemove m;
+    m.ParseFEN(fen4);
+    m.generateFen();
 
 }

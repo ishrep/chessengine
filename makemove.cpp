@@ -12,9 +12,11 @@ class makemove:public movegen{
     15, 15, 15, 15, 15, 15, 15, 15,
     15, 15, 15, 15, 15, 15, 15, 15,
      7, 15, 15, 15,  3, 15, 15, 11};
+    string PrevFen="";
     bool execmove(int move);
     void validMove(string mov);
     void TakeMove(int move);
+    void generateFen();
 };
 void makemove::validMove(string mov){
     int move=0, tempPce=EMPTY;
@@ -46,6 +48,7 @@ void makemove::validMove(string mov){
     return;
 }
 bool makemove::execmove(int move){
+    generateFen();
     int ff =((move) & 7);
     int fr = ((move>>3)&7); 
     int tf = ((move>>6)&7);
@@ -116,15 +119,112 @@ bool makemove::execmove(int move){
 }
 
 void makemove::TakeMove(int move){
-    int ff =((move) & 7);
-    int fr = ((move>>3)&7); 
-    int tf = ((move>>6)&7);
-    int tr = ((move>>9)&7);
-    int pr = ((move>>12)&15);
-    int ep = ((move>>16)&1);
-    int cast = ((move>>17)&1);
-    int sidedir[] = {1,-1};
-    int pce = Brd[fr][ff];
-    FiftyMoves++;
-    TotalMoves++;
+    ParseFEN(PrevFen);
+}
+void makemove::generateFen(){
+    int i=0;
+    int j=0;
+    string fen[70];
+    for(int m=7;m>=0;m--){
+        j=0;
+        for(int n=0;n<8;n++){
+            switch(Brd[m][n]){
+                case wP: if(j!=0)
+                            fen[i++]=to_string(j);
+                        fen[i++]="P";j=0;break;
+                case wN: if(j!=0)
+                            fen[i++]=to_string(j);
+                        fen[i++]="N";j=0;break;
+                case wB: if(j!=0)
+                            fen[i++]=to_string(j);
+                        fen[i++]="B";j=0;break;
+                case wR: if(j!=0)
+                            fen[i++]=to_string(j);
+                        fen[i++]="R";j=0;break;
+                case wQ: if(j!=0)
+                            fen[i++]=to_string(j);
+                        fen[i++]="Q";j=0;break;
+                case wK: if(j!=0)
+                            fen[i++]=to_string(j);
+                        fen[i++]="K";j=0;break;
+                case bP: if(j!=0)
+                            fen[i++]=to_string(j);
+                        fen[i++]="p";j=0;break;
+                case bN: if(j!=0)
+                            fen[i++]=to_string(j);
+                        fen[i++]="n";j=0;break; 
+                case bB: if(j!=0)
+                            fen[i++]=to_string(j);
+                        fen[i++]="b";j=0;break;
+                case bR: if(j!=0)
+                            fen[i++]=to_string(j);
+                        fen[i++]="r";j=0;break;
+                case bQ: if(j!=0)
+                            fen[i++]=to_string(j);
+                        fen[i++]="q";j=0;break;
+                case bK: if(j!=0)
+                            fen[i++]=to_string(j);
+                        fen[i++]="k";j=0;break;
+                default: j++;
+            }
+        }
+        if(j!=0){
+            fen[i++]=to_string(j);
+        }
+        if(m!=0)
+            fen[i++]="/";
+    }
+    fen[i++]=" ";
+    if(side==0){
+        fen[i++]="w";
+    }
+    else{
+        fen[i++]="b";
+    }
+    fen[i++]=" ";
+    if((CastlePerm & 1) == 1){
+        fen[i++]="K";
+    }
+    if((CastlePerm & 2) == 2){
+        fen[i++]="Q";
+    }
+    if((CastlePerm & 4) == 4){
+        fen[i++]="k";
+    }
+    if((CastlePerm & 8) == 8){
+        fen[i++]="q";
+    }
+    if((CastlePerm & 15) == 0){
+        fen[i++]="-";
+    }
+    fen[i++]=" ";
+    if(EnPassant!=OFFBOARD){
+        fen[i++]=files[EnPassant%10];
+        fen[i++]=ranks[EnPassant/10];
+    }
+    else{
+        fen[i++]="-";
+    }
+    fen[i++]=" ";
+    if(FiftyMoves/10<1){
+        fen[i++]=to_string(FiftyMoves);
+    }
+    else{
+        fen[i++]=to_string(FiftyMoves/10);
+        fen[i++]=to_string(FiftyMoves%10);
+    }
+    fen[i++]=" ";
+    fen[i]=to_string(TotalMoves);
+    int count = 0;
+    int n=TotalMoves;
+    while (n != 0)
+    {
+        n = n / 10;
+        ++count;
+    }
+    fen[i+count]="\0";
+    i=0;
+    while(fen[i]!="\0"){
+        PrevFen=PrevFen+fen[i++];
+    }
 }
