@@ -24,7 +24,6 @@ bool makemove::IsCheckMate(){
     for(int i=0;i<movelist.size();i++){
         if(execmove(movelist[i])){
             ParseFEN(PrevFen);
-            movelist.clear();
             return false;
         }
     }
@@ -32,7 +31,6 @@ bool makemove::IsCheckMate(){
     return true;
 }
 void makemove::validMove(string mov){
-    GenerateAllMoves();
     char prompce;
     int move=0, tempPce=EMPTY;
     int sidedir[]={1,-1};
@@ -72,7 +70,7 @@ void makemove::validMove(string mov){
         tempmove=movelist[i] & 0xffff;
         if(tempmove==move){
             if(!execmove(movelist[i]))
-                cout<<"\nInvalid Move";
+                cout<<"\nInvalid Move, King is attacked!!";
             PrintBoard();    
             movelist.clear();
             return;
