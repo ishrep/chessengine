@@ -126,7 +126,6 @@ void board::ParseFEN(string fen){
     if(fen[i+1]!='\0') TotalMoves = TotalMoves*10+ fen[++i] - '0';
     
 
-    PrintBoard();
 }
 
 void board::AddPiece(int pce, int rank, int file){
