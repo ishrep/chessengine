@@ -27,9 +27,15 @@ class board{
     void ClearPiece(int rank,int file);
     void UpdateMaterial();
     void PrintBoard();
+    bool Check_FM();
 
 };
-
+bool board::Check_FM(){
+    if(FiftyMoves==50){
+        return true;
+    }
+    return false;
+}
 void board::SetBoard(){
     for(int i=0;i<13;i++){
         PieceNum[i]=0;

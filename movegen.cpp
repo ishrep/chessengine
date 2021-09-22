@@ -267,17 +267,17 @@ void movegen::CastleMov(){
     int file = sq %10;
     int oppside[] = {1,0};
     if(side==WHITE && !SqAttacked(PList[wK][0])){
-        if(CastlePerm & 1 == 1 && Brd[0][5] == EMPTY && Brd[0][6] == EMPTY && !SqAttacked(5) && !SqAttacked(6)){
+        if(((CastlePerm & 1 )== 1) && Brd[0][5] == EMPTY && Brd[0][6] == EMPTY && !SqAttacked(5) && !SqAttacked(6)){
             createmove(file,rank,6,0,0,0,1);
         }
-        if(CastlePerm & 2==2 && Brd[0][1] == EMPTY && Brd[0][2] == EMPTY && Brd[0][3] == EMPTY && !SqAttacked(2) && !SqAttacked(3)){
+        if(((CastlePerm & 2)==2) && Brd[0][1] == EMPTY && Brd[0][2] == EMPTY && Brd[0][3] == EMPTY && !SqAttacked(2) && !SqAttacked(3)){
             createmove(file,rank,2,0,0,0,1);
         }
     }else if(side == BLACK  && !SqAttacked(PList[bK][0])){
-        if(CastlePerm & 4 == 4  && Brd[7][5] == EMPTY && Brd[7][6] == EMPTY && !SqAttacked(75) && !SqAttacked(76)){
+        if(((CastlePerm & 4 )== 4 ) && Brd[7][5] == EMPTY && Brd[7][6] == EMPTY && !SqAttacked(75) && !SqAttacked(76)){
             createmove(file,rank,6,7,0,0,1);
         }
-        if(CastlePerm & 8 == 8 && Brd[7][2] == EMPTY && Brd[7][3] == EMPTY && Brd[7][1] == EMPTY && !SqAttacked(72) && !SqAttacked(73)){
+        if(((CastlePerm & 8) == 8) && Brd[7][2] == EMPTY && Brd[7][3] == EMPTY && Brd[7][1] == EMPTY && !SqAttacked(72) && !SqAttacked(73)){
             createmove(file,rank,2,7,0,0,1);
         }
     }

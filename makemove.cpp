@@ -17,7 +17,20 @@ class makemove:public movegen{
     void validMove(string mov);
     void TakeMove(int move);
     void generateFen();
+    bool IsCheckMate();
 };
+bool makemove::IsCheckMate(){
+    GenerateAllMoves();
+    for(int i=0;i<movelist.size();i++){
+        if(execmove(movelist[i])){
+            ParseFEN(PrevFen);
+            movelist.clear();
+            return false;
+        }
+    }
+    movelist.clear();
+    return true;
+}
 void makemove::validMove(string mov){
     GenerateAllMoves();
     char prompce;
@@ -138,11 +151,11 @@ bool makemove::execmove(int move){
         return false;
     }
     side^=1;
-    movelist.clear();
     return true;
 }
 
 void makemove::generateFen(){
+    PrevFen="";
     int j=0;
     for(int m=7;m>=0;m--){
         j=0;
