@@ -102,7 +102,7 @@ void board::ParseFEN(string fen){
                             break;
                 case 'q':   CastlePerm^=8;
                             break;
-                default: cout<<"invalid FEN";
+                default: cout<<"\ninvalid FEN\n";
             }
         }
     }
@@ -142,11 +142,11 @@ void board::AddPiece(int pce, int rank, int file){
 void board::ClearPiece(int rank, int file){
     int pce = Brd[rank][file];
     int sq = rank *10 + file;
-    for(int i = 0; i<PieceNum[i] ; i++){
+    for(int i = 0; i<PieceNum[pce] ; i++){
         if(PList[pce][i] == sq){
             Brd[rank][file] = EMPTY;
-            PList[pce][i] = PList[pce][PieceNum[pce]];
-            PieceNum[pce] = OFFBOARD;
+            PList[pce][i] = PList[pce][PieceNum[pce]-1];
+            PList[pce][PieceNum[pce]-1] = OFFBOARD;
             PieceNum[pce]--;
             if(pce>=0 && pce<=6){
                 Material[0] -= PceVal[pce];

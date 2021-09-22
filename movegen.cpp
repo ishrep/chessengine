@@ -26,13 +26,13 @@ class movegen: public board{
     void GenerateAllMoves();
 };
 void movegen::GenerateAllMoves(){
-    void PawnMov();
-    void KingMov();
-    void KnightMov();
-    void RookMov();
-    void BishopMov();
-    void QueenMov();
-    void CastleMov();
+    PawnMov();
+    KingMov();
+    KnightMov();
+    RookMov();
+    BishopMov();
+    QueenMov();
+    CastleMov();
 }
 
 void movegen::createmove(int fc,int fr, int tc, int tr, int pp, int ep,int cs){
@@ -240,7 +240,6 @@ void movegen::PawnMov(){
             else createmove(column,rank,cdr,rd,0,0,0);
         }
     }
-    PrintMoveList();
 }
 
 void movegen::KingMov(){
