@@ -25,7 +25,6 @@ class board{
     void ParseFEN(string fen);
     void AddPiece(int pce, int rank, int file);
     void ClearPiece(int rank,int file);
-    void UpdateMaterial();
     void PrintBoard();
     bool Check_FM();
 

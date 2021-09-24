@@ -13,8 +13,8 @@ class movegen: public board{
     vector<int> movelist;                                       // stores the indexes from and to for all available moves. 
     public:
     
-    bool SqAttacked(int sq);
-    void PawnMov();
+    bool SqAttacked(int sq);        //sq= rank*10+file
+    void PawnMov(); 
     void KingMov();
     void KnightMov();
     void RookMov();
