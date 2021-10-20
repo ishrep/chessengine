@@ -8,17 +8,16 @@ string DefaultFen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 using namespace std;
 int main(){
     makemove m;
-    m.ParseFEN(DefaultFen);
+    m.ParseFEN(DefaultFen); //set default position (i.e. starting of the game)
     m.PrintBoard();
     int n=0;
-
-    while(n!=3){
+    while(n!=3){                    //n=3 when user select exit option
         if(m.Check_FM()){
-            cout<<"\nGame Drawn";
+            cout<<"\nGame Drawn";       //check for fifity moves
             break;
         }
         if(m.IsCheckMate()){
-            cout<<"\nGame Over";
+            cout<<"\nGame Over";        //check for checkmate/stalemate
             break;
         }
         string fen;
@@ -27,7 +26,7 @@ int main(){
         cin>>n;
         switch(n){
             case 1: cout<<"Enter FEN: ";
-                    getchar();
+                    getchar();                  
                     getline(cin, fen,'\n');
                     m.ParseFEN(fen);break;
             case 2: cout<<"Enter move: ";
@@ -35,7 +34,6 @@ int main(){
                     m.validMove(mov);break;
             case 3: break;
             default: cout<<"Invalid choice";
-        }
-        cin.clear();
+        }      
     }
 }

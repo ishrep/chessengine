@@ -15,7 +15,6 @@ class makemove:public movegen{
     string PrevFen="";
     bool execmove(int move);
     void validMove(string mov);
-    void TakeMove(int move);
     void generateFen();
     bool IsCheckMate();
 };
@@ -120,7 +119,7 @@ bool makemove::execmove(int move){
         FiftyMoves = 0;
     }
     else if(ep==1){
-        ClearPiece((EnPassant - sidedir[side]*10)/10,EnPassant%10);
+        ClearPiece((EnPassant - sidedir[side]*10)/10,EnPassant%10);     //remove pawn from +10 or -10 sq
         ClearPiece(fr,ff);
         AddPiece(pce,tr,tf);
         FiftyMoves=0;

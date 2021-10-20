@@ -21,7 +21,7 @@ class board{
     int TotalMoves;
     public:
     //Function members
-    void SetBoard();
+    void SetBoard();        //initialize the board
     void ParseFEN(string fen);
     void AddPiece(int pce, int rank, int file);
     void ClearPiece(int rank,int file);
@@ -84,18 +84,19 @@ void board::ParseFEN(string fen){
             case 'K':   AddPiece(wK, rank, file); 
                         break;
             case '/':   rank = rank - 1;
-                        file = 0;
+                        file = 0;           //for new rank
                         continue;
         }
         if(fen[i] >= '1' && fen[i] <= '8'){
             file += fen[i] - '0';
         }
-        else file++;
+        else file++;            //space
     }
     if(fen[++i] == 'w') side = WHITE;
     else side = BLACK;
     
-    i+=2;
+    i+=2;                           //space
+    //castle
     if(fen[i]!= '-'){
         for(; fen[i] != ' '; i++){
             switch(fen[i]){
@@ -120,11 +121,11 @@ void board::ParseFEN(string fen){
         EnPassant += ((fen[++i] - '1')*10);  
     }
     
-    i+=2;
+    i+=2;                               //space
     FiftyMoves = fen[i]-'0';
     if(fen[i+1]!=' ') FiftyMoves = FiftyMoves*10+ fen[++i] - '0';
 
-    i+=2;
+    i+=2;                       //space
     
     TotalMoves = fen[i]-'0';
     if(fen[i+1]!='\0') TotalMoves = TotalMoves*10+ fen[++i] - '0';
@@ -138,8 +139,8 @@ void board::AddPiece(int pce, int rank, int file){
     Brd[rank][file] = pce;
     PList[pce][PieceNum[pce]] = sq;
     PList[pce][++PieceNum[pce]] = OFFBOARD;
-    if(pce>=0 && pce<=6){
-        Material[0] += PceVal[pce];
+    if(pce>=0 && pce<=6){                           //white side have pieces from 1 to 6
+        Material[0] += PceVal[pce];             
     }
     else  Material[1] += PceVal[pce];
 }
@@ -147,12 +148,12 @@ void board::ClearPiece(int rank, int file){
     int pce = Brd[rank][file];
     int sq = rank *10 + file;
     for(int i = 0; i<PieceNum[pce] ; i++){
-        if(PList[pce][i] == sq){
-            Brd[rank][file] = EMPTY;
-            PList[pce][i] = PList[pce][PieceNum[pce]-1];
-            PList[pce][PieceNum[pce]-1] = OFFBOARD;
+        if(PList[pce][i] == sq){                //got the piece which has to be removed 
+            Brd[rank][file] = EMPTY;                
+            PList[pce][i] = PList[pce][PieceNum[pce]-1];        //from where the piece is being removed, last piece is added there
+            PList[pce][PieceNum[pce]-1] = OFFBOARD;         //last plist  value set to offboard
             PieceNum[pce]--;
-            if(pce>=0 && pce<=6){
+            if(pce>=0 && pce<=6){                   //white side have pieces from 1 to 6
                 Material[0] -= PceVal[pce];
             }
             else  Material[1] -= PceVal[pce];
@@ -192,7 +193,7 @@ void board::PrintBoard(){
     cout<<"\n\nside:"<< side <<endl;
     cout<<"\nenpassant:";
     if(EnPassant != OFFBOARD){
-      cout<<files[EnPassant%10]<<EnPassant/10+1;
+      cout<<files[EnPassant%10]<<EnPassant/10+1;            //sq=10*rank + file; string files= "abcdefgh"; string ranks= "12345678";
     }
     cout<<"\nCastle Available:"<<    
         ((CastlePerm & 1) ? 'K' : '-')<<

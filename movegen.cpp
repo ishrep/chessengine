@@ -11,6 +11,9 @@ class movegen: public board{
     vector<int> knightMov = {8,-8,12,-12,19,-19,21,-21};    //stores the value for which the Knight can move on the board.
 
     vector<int> movelist;                                       // stores the indexes from and to for all available moves. 
+     /* 1 	    1  	1111	111 	111  	111	111
+        Cast	EP	 PP	    TR	    TC	    FR	FC   */
+
     public:
     
     bool SqAttacked(int sq);        //sq= rank*10+file
@@ -69,7 +72,7 @@ bool movegen::SqAttacked(int sq){
         int tsq=sq+queenMov[i];
         int f=tsq%10;
         int r=tsq/10;
-        while(f>=0 && f<=7 && r>=0 && r<=7){
+        while(f>=0 && f<=7 && r>=0 && r<=7){            //travell till sq is out of board
             if(side==0){
                 if(Brd[r][f]==bQ){
                     return true;
@@ -79,10 +82,10 @@ bool movegen::SqAttacked(int sq){
                     return true;
                 }
             }
-            if(Brd[r][f]!=EMPTY){
+            if(Brd[r][f]!=EMPTY){           //break the loop if there is a piece
                 break;
             }
-            tsq=tsq+queenMov[i];
+            tsq=tsq+queenMov[i];            //travelling in same direction
             f=tsq%10;
             r=tsq/10;
         }
@@ -202,7 +205,7 @@ void movegen::PawnMov(){
         if(Brd[rank+ sidemove[side]][column] == EMPTY){
             //promotion
             if(rank == ((side+1)%2)*5 + 1){
-                 for(int i = 1;i<=4;i++){
+                 for(int i = 1;i<=4;i++){               //pawn can be promoted in 4 types of pieces
                      createmove(column,rank,column,rank+sidemove[side],pawnside+i,0,0);
                  }
             }
@@ -213,9 +216,9 @@ void movegen::PawnMov(){
                 createmove(column,rank,column,rank+sidemove[side]*2,0,0,0);
             }
         }
-        int rd = rank + sidemove[side];
-        int cdl = column + sidemove[side];
-        int cdr = column - sidemove[side];
+        int rd = rank + sidemove[side];         //rank diagonal
+        int cdl = column + sidemove[side];      //column diagonal left
+        int cdr = column - sidemove[side];      // column diagonal right
         //enPassant
         if(EnPassant != OFFBOARD && (EnPassant == sidemove[side]*9 + sq || EnPassant == sidemove[side]*11 + sq)){
             createmove(column,rank,(EnPassant%10),(EnPassant/10),0,1,0);
@@ -223,7 +226,7 @@ void movegen::PawnMov(){
         // capture moves
         //left side
         if(cdl>-1 && cdl<8 && Brd[rd][cdl] > oppside[side]*6 && Brd[rd][cdl] < oppside[side]*6+7){
-            if(rank == ((side+1)%2)*5 + 1){
+            if(rank == ((side+1)%2)*5 + 1){             //capture promotional move
                  for(int i = 1;i<=4;i++){
                      createmove(column,rank,cdl,rd,pawnside+i,0,0);
                  }
@@ -232,7 +235,7 @@ void movegen::PawnMov(){
         }
         //right side
         if(cdr>-1 && cdr<8 && Brd[rd][cdr] > oppside[side]*6 && Brd[rd][cdr] < oppside[side]*6+7){
-            if(rank == ((side+1)%2)*5 + 1){
+            if(rank == ((side+1)%2)*5 + 1){             //capture promotional move
                  for(int i = 1;i<=4;i++){
                      createmove(column,rank,cdr,rd,pawnside+i,0,0);
                  }
