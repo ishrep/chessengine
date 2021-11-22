@@ -2,12 +2,12 @@
 #include "board.cpp"
 #include "movegen.cpp"
 #include "makemove.cpp"
-
+#include "alphabeta.cpp"
 
 string DefaultFen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 using namespace std;
 int main(){
-    makemove m;
+    /*makemove m;
     m.ParseFEN(DefaultFen); //set default position (i.e. starting of the game)
     m.PrintBoard();
     int n=0;
@@ -35,5 +35,14 @@ int main(){
             case 3: break;
             default: cout<<"Invalid choice";
         }      
+    }*/
+    alphabeta ab;
+    ab.ParseFEN(DefaultFen);
+   
+    cout<<ab.minimax(3,true,-1000,1000)<<"\n";
+
+    for(int i= 0;i<ab.movedata[0].size();i++){
+        cout<<ab.movedata[0][i]<<"\t";
+        cout<<ab.movedata[1][i]<<"\n";
     }
 }

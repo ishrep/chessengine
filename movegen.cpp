@@ -28,6 +28,7 @@ class movegen: public board{
     void createmove(int fc,int fr, int tc, int tr, int pp, int ep,int castle);
     void GenerateAllMoves();
 };
+
 void movegen::GenerateAllMoves(){
     PawnMov();
     KingMov();

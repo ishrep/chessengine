@@ -12,10 +12,10 @@ class makemove:public movegen{
     15, 15, 15, 15, 15, 15, 15, 15,0,0,
     15, 15, 15, 15, 15, 15, 15, 15,0,0,
      7, 15, 15, 15,  3, 15, 15, 11,0,0};
-    string PrevFen="";
+    string PrevFen= "";
     bool execmove(int move);
     void validMove(string mov);
-    void generateFen();
+    string generateFen();
     bool IsCheckMate();
 };
 bool makemove::IsCheckMate(){
@@ -151,8 +151,8 @@ bool makemove::execmove(int move){
     return true;
 }
 
-void makemove::generateFen(){
-    PrevFen="";
+string makemove::generateFen(){
+    string PrevFen="";
     int j=0;
     for(int m=7;m>=0;m--){
         j=0;
@@ -232,4 +232,5 @@ void makemove::generateFen(){
     PrevFen+=to_string(FiftyMoves);
     PrevFen+=" ";
     PrevFen+=to_string(TotalMoves);
+    return PrevFen;
 }

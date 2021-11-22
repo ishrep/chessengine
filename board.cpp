@@ -6,7 +6,7 @@ enum {EMPTY=0,wP=1,wN=2,wB=3,wR=4,wQ=5,wK=6,bP=7,bN=8,bB=9,bR=10,bQ=11,bK=12};
 enum {A=0,B=1,C=2,D=3,E=4,F=5,G=6,H=7};
 string files= "abcdefgh";
 string ranks= "12345678";
-int PceVal[13] = { 0, 100, 325, 325, 550, 1000, 50000, 100, 325, 325, 550, 1000, 50000};
+int PceVal[13] = { 0, 100, 325, 325, 550, 1000, 50000, -100, -325, -325, -550, -1000, -50000};
 class board{
     protected:
     //data members
@@ -14,12 +14,13 @@ class board{
     int PList[13][10]; //stores index of board for each piece type
     int CastlePerm; //Store WKCA=1, WQCA=2, BKCA=4, BQCA=8 according to available castling 
     int EnPassant; //Stores index of block Where enPassant move is available
-    int side ;  //side to move 
+    int side;  //side to move 
     int Material[2]; //stores total piece value for each side
     int PieceNum[13]; //stores no of piece of each type 
     int FiftyMoves;
     int TotalMoves;
     public:
+   
     //Function members
     void SetBoard();        //initialize the board
     void ParseFEN(string fen);
