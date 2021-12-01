@@ -20,6 +20,7 @@ class makemove:public movegen{
 };
 bool makemove::IsCheckMate(){
     GenerateAllMoves();
+    PrevFen=generateFen();
     for(int i=0;i<movelist.size();i++){
         if(execmove(movelist[i])){
             ParseFEN(PrevFen);

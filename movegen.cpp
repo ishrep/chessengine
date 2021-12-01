@@ -10,12 +10,12 @@ class movegen: public board{
     vector<int> rookMov = { 10,-10, 1,-1};                  //stores the value for which the Rook can move on the board.
     vector<int> knightMov = {8,-8,12,-12,19,-19,21,-21};    //stores the value for which the Knight can move on the board.
 
-    vector<int> movelist;                                       // stores the indexes from and to for all available moves. 
+    
      /* 1 	    1  	1111	111 	111  	111	111
         Cast	EP	 PP	    TR	    TC	    FR	FC   */
 
     public:
-    
+    vector<int> movelist;                                       // stores the indexes from and to for all available moves. 
     bool SqAttacked(int sq);        //sq= rank*10+file
     void PawnMov(); 
     void KingMov();

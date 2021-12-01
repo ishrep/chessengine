@@ -1,4 +1,5 @@
 #include<bits/stdc++.h>
+#include<windows.h>
 #include "board.cpp"
 #include "movegen.cpp"
 #include "makemove.cpp"
@@ -7,42 +8,48 @@
 string DefaultFen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 using namespace std;
 int main(){
-    /*makemove m;
-    m.ParseFEN(DefaultFen); //set default position (i.e. starting of the game)
-    m.PrintBoard();
-    int n=0;
-    while(n!=3){                    //n=3 when user select exit option
-        if(m.Check_FM()){
-            cout<<"\nGame Drawn";       //check for fifity moves
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    SetConsoleTextAttribute(hConsole, 10);
+    time_t start, end;
+    double time_taken;
+    alphabeta ab;
+    ab.ParseFEN(DefaultFen); //set default position (i.e. starting of the game)
+    ab.PrintBoard();
+    int n=0,q;
+    while(n!=4){                    //n=3 when user select exit option
+        if(ab.Check_FM()){
+            cout<<"\nGame Drawn";       //check for fifty moves
             break;
         }
-        if(m.IsCheckMate()){
-            cout<<"\nGame Over";        //check for checkmate/stalemate
+        if(ab.IsCheckMate()){
+            cout<<"\nGame Over";        //check for checkmate
             break;
         }
         string fen;
         string mov;
-        cout<<"\n1. fen\n2. move\n3. exit\nEnter choice:";
+        cout<<"\n1. fen\n2. move\n3. CPU move\n4. exit\nEnter choice:";
         cin>>n;
         switch(n){
             case 1: cout<<"Enter FEN: ";
                     getchar();                  
                     getline(cin, fen,'\n');
-                    m.ParseFEN(fen);break;
+                    ab.ParseFEN(fen);
+                    ab.PrintBoard();
+                    break;
             case 2: cout<<"Enter move: ";
                     cin>>mov;
-                    m.validMove(mov);break;
-            case 3: break;
+                    ab.validMove(mov);break;
+            case 3: cout<<"\nEnter Depth:";
+                    cin>>q;
+                    time(&start);
+                    ab.execmove(ab.bestmove(q));
+                    time(&end);
+                    time_taken = double(end - start);
+                    ab.PrintBoard();
+                    cout<<"\nExecution Time: "<<fixed<< time_taken << setprecision(5)<<"sec\n";
+                    break;
+            case 4: break;
             default: cout<<"Invalid choice";
         }      
-    }*/
-    alphabeta ab;
-    ab.ParseFEN(DefaultFen);
-   
-    cout<<ab.minimax(3,true,-1000,1000)<<"\n";
-
-    for(int i= 0;i<ab.movedata[0].size();i++){
-        cout<<ab.movedata[0][i]<<"\t";
-        cout<<ab.movedata[1][i]<<"\n";
     }
 }
