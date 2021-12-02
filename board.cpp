@@ -1,4 +1,4 @@
-#include<bits/stdc++.h>
+
 #define OFFBOARD 100
 using namespace std;
 enum {WHITE=0,BLACK=1};

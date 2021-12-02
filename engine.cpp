@@ -1,4 +1,8 @@
-#include<bits/stdc++.h>
+
+#include<iostream>
+#include<vector>
+#include<time.h>
+#include<iomanip>
 #include<windows.h>
 #include "board.cpp"
 #include "movegen.cpp"
