@@ -43,7 +43,7 @@ void movegen::createmove(int fc,int fr, int tc, int tr, int pp, int ep,int cs){
             int move=0;
             move = move^fc;
             move = move^(fr<<3);
-            move = move^(tc)<<6;
+            move = move^(tc<<6);
             move = move^(tr<<9);
             move = move^(pp<<12);
             move = move^(ep<<16);

@@ -8,15 +8,14 @@
 string DefaultFen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 using namespace std;
 int main(){
-    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-    SetConsoleTextAttribute(hConsole, 10);
+
     time_t start, end;
     double time_taken;
-    alphabeta ab;
+    alphabeta ab;            // Object of class Alpha beta
     ab.ParseFEN(DefaultFen); //set default position (i.e. starting of the game)
     ab.PrintBoard();
     int n=0,q;
-    while(n!=4){                    //n=3 when user select exit option
+    while(n!=4){                    //n=4 when user select exit option
         if(ab.Check_FM()){
             cout<<"\nGame Drawn";       //check for fifty moves
             break;
